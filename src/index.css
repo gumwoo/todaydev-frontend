@@ -1,26 +1,26 @@
 :root {
-  --paper: #fbfaf7;
-  --paper-warm: #f3efe7;
-  --ink: #171512;
-  --muted: #706a61;
-  --quiet: #948c80;
-  --line: #ded8cc;
-  --line-strong: #cfc6b8;
-  --surface: rgba(255, 255, 255, 0.7);
-  --surface-solid: #fffdf8;
-  --accent: #15130f;
+  --paper: #ffffff;
+  --paper-warm: #ffffff;
+  --ink: #111111;
+  --muted: #5f6673;
+  --quiet: #8a93a3;
+  --line: #e5e7eb;
+  --line-strong: #d1d5db;
+  --surface: rgba(255, 255, 255, 0.86);
+  --surface-solid: #ffffff;
+  --accent: #151515;
   --github: #24292f;
   --hacker-news: #ff6600;
   --devto: #111111;
-  --ai: #766246;
-  --success-bg: #e6f3df;
-  --success-text: #2d7b3f;
-  --waiting-bg: #eee8dc;
-  --waiting-text: #766246;
+  --ai: #475569;
+  --success-bg: #e7f7ed;
+  --success-text: #247a45;
+  --waiting-bg: #f3f4f6;
+  --waiting-text: #475569;
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 22px;
-  --shadow-soft: 0 18px 60px rgba(59, 47, 30, 0.08);
+  --shadow-soft: 0 18px 50px rgba(15, 23, 42, 0.08);
   --font-body:
     'Pretendard Variable', Pretendard, 'IBM Plex Sans KR', 'Noto Sans KR',
     sans-serif;
@@ -31,9 +31,7 @@
 
   font-family: var(--font-body);
   color: var(--ink);
-  background:
-    radial-gradient(circle at top right, rgba(231, 220, 196, 0.65), transparent 34rem),
-    linear-gradient(115deg, var(--paper), var(--paper-warm));
+  background: #ffffff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -51,6 +49,7 @@ html {
 body {
   min-height: 100%;
   margin: 0;
+  background: #ffffff;
 }
 
 a {

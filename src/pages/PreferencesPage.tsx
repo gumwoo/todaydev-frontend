@@ -181,11 +181,11 @@ export function PreferencesPage() {
     <section className="briefing-board single-column" aria-labelledby="page-title">
       <header className="board-header">
         <div>
-          <p className="eyebrow">preferences</p>
-          <h1 id="page-title">브리핑 재료를 조율합니다</h1>
+          <p className="eyebrow">관심사</p>
+          <h1 id="page-title">관심 있는 기술을 알려주세요</h1>
           <p className="lede">
-            키워드와 GitHub repository는 매일 아침 브리핑의 수집 기준입니다.
-            장식용 태그가 아니라 실제 점수화에 쓰이는 신호로 관리합니다.
+            보고 싶은 키워드와 GitHub 저장소를 등록하면 브리핑이 그 기준에 맞춰
+            글을 고릅니다.
           </p>
         </div>
       </header>
@@ -200,7 +200,7 @@ export function PreferencesPage() {
         <article className="preference-section">
           <div className="preference-heading">
             <div>
-              <p className="note-label">keyword signal</p>
+              <p className="note-label">키워드</p>
               <h2>관심 키워드</h2>
             </div>
             <span>{keywordCountLabel}</span>
@@ -231,7 +231,7 @@ export function PreferencesPage() {
               <li key={keyword.keywordId} className="preference-item">
                 <div>
                   <strong>{keyword.keyword}</strong>
-                  <span>weight {keyword.weight}</span>
+                  <span>중요도 {keyword.weight}</span>
                 </div>
                 <button
                   type="button"
@@ -248,7 +248,7 @@ export function PreferencesPage() {
         <article className="preference-section">
           <div className="preference-heading">
             <div>
-              <p className="note-label">repository watch</p>
+              <p className="note-label">저장소</p>
               <h2>GitHub 저장소</h2>
             </div>
             <span>{repositoryCountLabel}</span>
@@ -266,16 +266,13 @@ export function PreferencesPage() {
                 placeholder="예: spring-projects/spring-framework"
               />
             </label>
-            <button
-              type="submit"
-              disabled={repositorySubmitting || loading}
-            >
+            <button type="submit" disabled={repositorySubmitting || loading}>
               {repositorySubmitting ? '추가 중' : '저장소 추가'}
             </button>
           </form>
 
           <PreferenceList
-            emptyDescription="아직 저장소가 없습니다. 추적할 repository를 owner/repo 형식으로 추가해 보세요."
+            emptyDescription="아직 저장소가 없습니다. 살펴보고 싶은 GitHub 저장소를 owner/repo 형식으로 추가해 보세요."
             loading={loading}
           >
             {preferences.repositories.map((repository) => (
@@ -284,7 +281,7 @@ export function PreferencesPage() {
                   <strong>
                     {repository.owner}/{repository.repoName}
                   </strong>
-                  <span>GitHub repository</span>
+                  <span>GitHub 저장소</span>
                 </div>
                 <button
                   type="button"

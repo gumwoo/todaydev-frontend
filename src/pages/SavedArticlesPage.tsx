@@ -60,7 +60,7 @@ export function SavedArticlesPage() {
   const loading = savedPage === null || loadingPage !== page
   const totalLabel = useMemo(() => {
     const total = savedPage?.totalElements ?? 0
-    return `${total}개 저장`
+    return `${total}개 저장됨`
   }, [savedPage?.totalElements])
 
   function startEdit(article: SavedArticle) {
@@ -119,10 +119,11 @@ export function SavedArticlesPage() {
     <section className="briefing-board single-column" aria-labelledby="page-title">
       <header className="board-header">
         <div>
-          <p className="eyebrow">reading list</p>
-          <h1 id="page-title">저장한 글</h1>
+          <p className="eyebrow">저장한 글</p>
+          <h1 id="page-title">나중에 읽을 글</h1>
           <p className="lede">
-            브리핑에서 남겨둔 글과 메모를 다시 읽기 좋은 흐름으로 모읍니다.
+            마음에 드는 글을 저장해두고, 다시 읽을 때 필요한 메모를 남길 수
+            있습니다.
           </p>
         </div>
         <span className="detail-status">{totalLabel}</span>
@@ -142,11 +143,10 @@ export function SavedArticlesPage() {
 
       {!loading && items.length === 0 ? (
         <section className="reading-empty">
-          <p className="note-label">empty</p>
+          <p className="note-label">비어 있음</p>
           <h2>아직 저장한 글이 없습니다</h2>
           <p>
-            브리핑 상세에서 나중에 읽을 항목을 저장하면 이곳에 reading list로
-            모입니다.
+            브리핑 상세에서 나중에 읽고 싶은 글을 저장하면 이곳에 모입니다.
           </p>
           <Link className="primary-action inline-action" to={ROUTES.home}>
             홈으로 이동
@@ -203,7 +203,7 @@ export function SavedArticlesPage() {
                 <p className="memo-text">
                   {article.memo.length > 0
                     ? article.memo
-                    : '메모가 없습니다. 읽을 이유나 공유할 맥락을 남겨둘 수 있습니다.'}
+                    : '아직 메모가 없습니다. 읽어야 하는 이유나 기억할 내용을 남겨둘 수 있습니다.'}
                 </p>
               )}
             </div>

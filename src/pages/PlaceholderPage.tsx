@@ -16,10 +16,10 @@ export function PlaceholderPage({
       <p className="lede">{description}</p>
 
       <section className="editorial-note">
-        <p className="note-label">다음 구현 대상</p>
+        <p className="note-label">다음에 이어서 만들 화면</p>
         <p>
-          라우팅과 인증 보호는 준비되어 있습니다. 다음 단계에서 이 화면에
-          실제 API 데이터와 상태 UI를 연결합니다.
+          기본 흐름은 준비되어 있습니다. 다음 단계에서 실제 데이터와 상태를
+          연결해 더 자연스럽게 사용할 수 있게 만들겠습니다.
         </p>
       </section>
     </section>

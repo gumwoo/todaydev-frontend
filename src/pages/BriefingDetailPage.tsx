@@ -18,6 +18,11 @@ import { getSafeErrorMessage } from '../utils/errors'
 
 type SourceFilter = 'ALL' | Source
 
+type MetadataChip = {
+  label: string
+  value: string
+}
+
 const SOURCE_FILTERS: SourceFilter[] = [
   'ALL',
   SOURCE.github,
@@ -117,11 +122,11 @@ export function BriefingDetailPage() {
   if (invalidBriefingId) {
     return (
       <section className="briefing-board single-column" aria-labelledby="page-title">
-        <p className="eyebrow">not found</p>
+        <p className="eyebrow">찾을 수 없음</p>
         <h1 id="page-title">브리핑 정보를 찾을 수 없습니다</h1>
-        <p className="lede">주소의 브리핑 번호가 올바르지 않습니다.</p>
+        <p className="lede">주소가 올바르지 않습니다.</p>
         <Link className="primary-action inline-action" to={ROUTES.briefingNew}>
-          새 브리핑 생성
+          새 브리핑 만들기
         </Link>
       </section>
     )
@@ -130,10 +135,10 @@ export function BriefingDetailPage() {
   if (loading) {
     return (
       <section className="briefing-board single-column" aria-live="polite">
-        <p className="eyebrow">briefing detail</p>
+        <p className="eyebrow">불러오는 중</p>
         <h1>브리핑을 불러오고 있습니다</h1>
         <p className="lede">
-          source별 항목과 AI 요약을 읽기 화면으로 정리하고 있습니다.
+          읽기 좋은 화면으로 정리하고 있으니 잠시만 기다려 주세요.
         </p>
       </section>
     )
@@ -142,7 +147,7 @@ export function BriefingDetailPage() {
   if (briefing === null) {
     return (
       <section className="briefing-board single-column" aria-labelledby="page-title">
-        <p className="eyebrow">error</p>
+        <p className="eyebrow">문제 발생</p>
         <h1 id="page-title">브리핑을 불러오지 못했습니다</h1>
         {errorMessage.length > 0 ? (
           <p className="form-error preference-error" role="alert">
@@ -163,7 +168,8 @@ export function BriefingDetailPage() {
           <p className="eyebrow">{formatDate(briefing.generatedAt)}</p>
           <h1 id="page-title">{briefing.title}</h1>
           <p className="lede">
-            총 {totalItemCount}개의 항목을 source별로 정리했습니다.
+            총 {totalItemCount}개의 글을 읽기 쉽게 정리했습니다. 출처별로
+            골라보거나 마음에 드는 글을 저장할 수 있습니다.
           </p>
         </div>
         <span className={`detail-status ${briefing.status}`}>
@@ -179,12 +185,12 @@ export function BriefingDetailPage() {
 
       <section className="editorial-note detail-summary" aria-labelledby="summary-title">
         <p id="summary-title" className="note-label">
-          AI editorial note
+          한눈에 보기
         </p>
         <p>{briefing.summary}</p>
       </section>
 
-      <nav className="source-tabs" aria-label="브리핑 source 필터">
+      <nav className="source-tabs" aria-label="브리핑 출처 필터">
         {SOURCE_FILTERS.map((source) => (
           <button
             key={source}
@@ -233,7 +239,6 @@ function ArticleRow({ item, saved, saving, onSave }: ArticleRowProps) {
       <div className="article-main">
         <div className="article-meta">
           <span>{formatDate(item.publishedAt)}</span>
-          <MetadataLine source={item.source} metadata={item.metadata} />
         </div>
         <h2>
           <a href={item.url} target="_blank" rel="noopener noreferrer">
@@ -241,6 +246,7 @@ function ArticleRow({ item, saved, saving, onSave }: ArticleRowProps) {
           </a>
         </h2>
         <p>{item.summary}</p>
+        <MetadataChips source={item.source} metadata={item.metadata} />
       </div>
 
       <button
@@ -256,58 +262,97 @@ function ArticleRow({ item, saved, saving, onSave }: ArticleRowProps) {
   )
 }
 
-type MetadataLineProps = {
+type MetadataChipsProps = {
   source: Source
   metadata: BriefingMetadata
 }
 
-function MetadataLine({ source, metadata }: MetadataLineProps) {
-  const parts = metadataParts(source, metadata)
+function MetadataChips({ source, metadata }: MetadataChipsProps) {
+  const chips = metadataChips(source, metadata)
 
-  if (parts.length === 0) {
+  if (chips.length === 0) {
     return null
   }
 
-  return <span>{parts.join(' · ')}</span>
+  return (
+    <dl className="metadata-chips" aria-label="글 정보">
+      {chips.map((chip) => (
+        <div key={`${chip.label}-${chip.value}`} className="metadata-chip">
+          <dt>{chip.label}</dt>
+          <dd>{chip.value}</dd>
+        </div>
+      ))}
+    </dl>
+  )
 }
 
-function metadataParts(source: Source, metadata: BriefingMetadata) {
+function metadataChips(source: Source, metadata: BriefingMetadata) {
   if (source === SOURCE.github) {
     return compactMetadata([
-      formatMetadataNumber('stars', metadata.stars),
-      formatMetadataNumber('comments', metadata.comments),
-      formatTags(metadata.tags),
+      stringChip('저장소', repositoryName(metadata)),
+      stringChip('태그', metadata.tagName),
     ])
   }
 
   if (source === SOURCE.hackerNews) {
     return compactMetadata([
-      formatMetadataNumber('score', metadata.score),
-      formatMetadataNumber('comments', metadata.comments),
+      stringChip('작성자', metadata.author),
+      numberChip('점수', metadata.score),
+      stringChip('종류', metadata.type),
     ])
   }
 
   if (source === SOURCE.devto) {
     return compactMetadata([
-      formatMetadataNumber('reactions', metadata.reactions),
-      formatMetadataNumber('comments', metadata.comments),
-      formatTags(metadata.tags),
+      numberChip('반응', metadata.reactions),
+      numberChip('댓글', metadata.comments),
+      stringChip('태그', formatTags(metadata.tags)),
     ])
   }
 
-  return compactMetadata([formatTags(metadata.tags)])
+  return compactMetadata([stringChip('태그', formatTags(metadata.tags))])
 }
 
-function compactMetadata(values: Array<string | null>) {
-  return values.filter((value): value is string => value !== null)
+function repositoryName(metadata: BriefingMetadata) {
+  const owner = stringValue(metadata.owner)
+  const repoName = stringValue(metadata.repoName)
+
+  if (owner === null || repoName === null) {
+    return null
+  }
+
+  return `${owner}/${repoName}`
 }
 
-function formatMetadataNumber(label: string, value: BriefingMetadata[string]) {
+function compactMetadata(values: Array<MetadataChip | null>) {
+  return values.filter((value): value is MetadataChip => value !== null)
+}
+
+function stringChip(label: string, value: BriefingMetadata[string] | string | null) {
+  const safeValue = stringValue(value)
+
+  if (safeValue === null) {
+    return null
+  }
+
+  return { label, value: safeValue }
+}
+
+function numberChip(label: string, value: BriefingMetadata[string]) {
   if (typeof value !== 'number') {
     return null
   }
 
-  return `${label} ${value}`
+  return { label, value: new Intl.NumberFormat('ko-KR').format(value) }
+}
+
+function stringValue(value: BriefingMetadata[string] | string | null) {
+  if (typeof value !== 'string') {
+    return null
+  }
+
+  const trimmed = value.trim()
+  return trimmed.length === 0 ? null : trimmed
 }
 
 function formatTags(value: BriefingMetadata[string]) {
@@ -315,7 +360,15 @@ function formatTags(value: BriefingMetadata[string]) {
     return null
   }
 
-  return value.slice(0, 3).join(', ')
+  const tags = value
+    .filter((tag): tag is string => typeof tag === 'string' && tag.trim().length > 0)
+    .slice(0, 4)
+
+  if (tags.length === 0) {
+    return null
+  }
+
+  return tags.join(', ')
 }
 
 function countBySource(sections: BriefingSection[], source: SourceFilter) {
@@ -365,7 +418,7 @@ function statusLabel(status: BriefingStatus) {
     return '실패'
   }
 
-  return '생성 중'
+  return '만드는 중'
 }
 
 function formatScore(score: number) {

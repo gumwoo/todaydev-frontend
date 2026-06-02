@@ -29,11 +29,10 @@ export function BriefingCreatePage() {
     <section className="briefing-board single-column" aria-labelledby="page-title">
       <header className="board-header">
         <div>
-          <p className="eyebrow">briefing generation</p>
-          <h1 id="page-title">새 브리핑을 생성합니다</h1>
+          <p className="eyebrow">새 브리핑</p>
+          <h1 id="page-title">오늘 읽을 소식을 모아볼게요</h1>
           <p className="lede">
-            GitHub, Hacker News, DEV.to를 수집하고 관심사 기준으로 점수화한
-            뒤 AI 요약까지 이어집니다.
+            관심사에 맞는 글을 찾고, 중요한 내용부터 읽기 쉽게 정리합니다.
           </p>
         </div>
       </header>
@@ -46,11 +45,11 @@ export function BriefingCreatePage() {
 
       <section className="generation-panel" aria-labelledby="generation-title">
         <div>
-          <p className="note-label">request</p>
-          <h2 id="generation-title">오늘 읽을 흐름을 수집합니다</h2>
+          <p className="note-label">시작하기</p>
+          <h2 id="generation-title">브리핑 만들기</h2>
           <p>
-            생성 요청은 빠르게 접수되고, 이후 진행률은 별도 stream token으로
-            연결한 SSE timeline에서 확인합니다.
+            몇 분 정도 걸릴 수 있어요. 진행 상황은 화면에서 바로 확인할 수
+            있습니다.
           </p>
         </div>
         <button
@@ -58,25 +57,25 @@ export function BriefingCreatePage() {
           disabled={submitting}
           onClick={() => void handleCreateBriefing()}
         >
-          {submitting ? '생성 요청 중' : '브리핑 생성 시작'}
+          {submitting ? '브리핑 만드는 중' : '브리핑 만들기'}
         </button>
       </section>
 
-      <section className="generation-rules" aria-label="생성 흐름 기준">
+      <section className="generation-rules" aria-label="브리핑 생성 과정">
         <article>
           <span>01</span>
-          <strong>요청 접수</strong>
-          <p>백엔드는 `GENERATING` 상태를 즉시 반환합니다.</p>
+          <strong>관심사 확인</strong>
+          <p>등록한 키워드와 저장소를 확인합니다.</p>
         </article>
         <article>
           <span>02</span>
-          <strong>출처 수집</strong>
-          <p>GitHub, Hacker News, DEV.to 진행 상태를 단계별로 받습니다.</p>
+          <strong>새 글 찾기</strong>
+          <p>GitHub, Hacker News, DEV.to에서 읽을 만한 글을 모읍니다.</p>
         </article>
         <article>
           <span>03</span>
-          <strong>AI 요약과 저장</strong>
-          <p>완료, 일부 완료, 실패를 종료 이벤트로 구분합니다.</p>
+          <strong>요약 정리</strong>
+          <p>중요한 글을 골라 핵심 내용을 정리합니다.</p>
         </article>
       </section>
     </section>

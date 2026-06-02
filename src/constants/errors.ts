@@ -1,4 +1,4 @@
-export const ERROR_CODE = {
+﻿export const ERROR_CODE = {
   validationFailed: 'VALIDATION_FAILED',
   invalidRequest: 'INVALID_REQUEST',
   resourceNotFound: 'RESOURCE_NOT_FOUND',
@@ -49,9 +49,9 @@ export const SAFE_ERROR_MESSAGE: Record<ErrorCode, string> = {
   [ERROR_CODE.authTokenExpired]: '로그인이 만료되었습니다.',
   [ERROR_CODE.authRefreshTokenInvalid]: '다시 로그인해 주세요.',
   [ERROR_CODE.authForbidden]: '접근 권한이 없습니다.',
-  [ERROR_CODE.preferenceKeywordDuplicated]: '이미 등록된 키워드입니다.',
+  [ERROR_CODE.preferenceKeywordDuplicated]: '이미 등록한 키워드입니다.',
   [ERROR_CODE.preferenceKeywordNotFound]: '키워드를 찾을 수 없습니다.',
-  [ERROR_CODE.preferenceRepositoryDuplicated]: '이미 등록된 저장소입니다.',
+  [ERROR_CODE.preferenceRepositoryDuplicated]: '이미 등록한 저장소입니다.',
   [ERROR_CODE.preferenceRepositoryNotFound]: '저장소를 찾을 수 없습니다.',
   [ERROR_CODE.preferenceRepositoryFormatInvalid]:
     '저장소는 owner/repo 형식으로 입력해 주세요.',

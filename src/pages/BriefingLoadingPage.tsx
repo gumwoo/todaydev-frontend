@@ -22,50 +22,49 @@ type TimelineItem = {
 }
 
 const TIMELINE: TimelineItem[] = [
-  { step: PROGRESS_STEP.briefingRequested, label: '브리핑 요청 접수' },
+  { step: PROGRESS_STEP.briefingRequested, label: '브리핑 요청 확인' },
   {
     step: PROGRESS_STEP.githubCollecting,
-    label: 'GitHub 릴리즈와 저장소 흐름 수집',
+    label: 'GitHub에서 새 글 찾는 중',
     source: SOURCE.github,
   },
   {
     step: PROGRESS_STEP.githubCollected,
-    label: 'GitHub 수집 완료',
+    label: 'GitHub 글 찾기 완료',
     source: SOURCE.github,
   },
   {
     step: PROGRESS_STEP.hackerNewsCollecting,
-    label: 'Hacker News 토론 흐름 수집',
+    label: 'Hacker News에서 글 찾는 중',
     source: SOURCE.hackerNews,
   },
   {
     step: PROGRESS_STEP.hackerNewsCollected,
-    label: 'Hacker News 수집 완료',
+    label: 'Hacker News 글 찾기 완료',
     source: SOURCE.hackerNews,
   },
   {
     step: PROGRESS_STEP.devtoCollecting,
-    label: 'DEV.to 글 수집',
+    label: 'DEV.to에서 글 찾는 중',
     source: SOURCE.devto,
   },
   {
     step: PROGRESS_STEP.devtoCollected,
-    label: 'DEV.to 수집 완료',
+    label: 'DEV.to 글 찾기 완료',
     source: SOURCE.devto,
   },
-  { step: PROGRESS_STEP.filtering, label: '관심사 기준 필터링' },
-  { step: PROGRESS_STEP.scoring, label: '읽을 가치 점수화' },
-  { step: PROGRESS_STEP.aiSummarizing, label: 'AI 요약 생성' },
-  { step: PROGRESS_STEP.saving, label: '브리핑 저장' },
-  { step: PROGRESS_STEP.done, label: '브리핑 완료' },
+  { step: PROGRESS_STEP.filtering, label: '관심사에 맞는 글 고르는 중' },
+  { step: PROGRESS_STEP.scoring, label: '먼저 읽을 글 정하는 중' },
+  { step: PROGRESS_STEP.aiSummarizing, label: '핵심 내용 요약 중' },
+  { step: PROGRESS_STEP.saving, label: '브리핑 저장 중' },
+  { step: PROGRESS_STEP.done, label: '브리핑 준비 완료' },
 ]
 
 export function BriefingLoadingPage() {
   const navigate = useNavigate()
   const params = useParams()
   const briefingId = Number(params.briefingId)
-  const invalidBriefingId =
-    !Number.isInteger(briefingId) || briefingId <= 0
+  const invalidBriefingId = !Number.isInteger(briefingId) || briefingId <= 0
   const [events, setEvents] = useState<BriefingProgressEvent[]>([])
   const [terminalEvent, setTerminalEvent] =
     useState<BriefingTerminalEvent | null>(null)
@@ -122,14 +121,13 @@ export function BriefingLoadingPage() {
   if (invalidBriefingId) {
     return (
       <section className="briefing-board single-column" aria-labelledby="page-title">
-        <p className="eyebrow">not found</p>
+        <p className="eyebrow">찾을 수 없음</p>
         <h1 id="page-title">브리핑 정보를 찾을 수 없습니다</h1>
         <p className="lede">
-          주소의 브리핑 번호가 올바르지 않습니다. 새 브리핑 생성을 다시
-          시작해 주세요.
+          주소가 올바르지 않습니다. 새 브리핑 만들기에서 다시 시작해 주세요.
         </p>
         <Link className="primary-action inline-action" to={ROUTES.briefingNew}>
-          새 브리핑 생성
+          새 브리핑 만들기
         </Link>
       </section>
     )
@@ -139,11 +137,10 @@ export function BriefingLoadingPage() {
     <section className="briefing-board single-column" aria-labelledby="page-title">
       <header className="board-header">
         <div>
-          <p className="eyebrow">live generation</p>
-          <h1 id="page-title">브리핑을 만들고 있습니다</h1>
+          <p className="eyebrow">준비 중</p>
+          <h1 id="page-title">브리핑을 준비하고 있어요</h1>
           <p className="lede">
-            단순 spinner 대신 각 출처 수집과 AI 요약 단계를 timeline으로
-            확인합니다.
+            새 글을 찾고 중요한 내용부터 정리하는 중입니다. 잠시만 기다려 주세요.
           </p>
         </div>
         <span className={`stream-state ${state}`}>{streamStateLabel(state)}</span>
@@ -157,7 +154,7 @@ export function BriefingLoadingPage() {
 
       <section className="progress-summary" aria-live="polite">
         <strong>{completedCount}</strong>
-        <span>수신한 진행 이벤트</span>
+        <span>완료한 단계</span>
         {terminalEvent !== null ? <p>{terminalEvent.message}</p> : null}
       </section>
 
@@ -180,8 +177,7 @@ export function BriefingLoadingPage() {
                   ) : null}
                 </div>
                 <p>
-                  {event?.message ??
-                    '아직 이 단계의 진행 이벤트를 기다리고 있습니다.'}
+                  {event?.message ?? '아직 이 단계를 기다리고 있습니다.'}
                 </p>
                 {event !== undefined ? (
                   <span className="timeline-count">
@@ -196,11 +192,11 @@ export function BriefingLoadingPage() {
 
       {terminalEvent !== null ? (
         <section className={`terminal-panel ${terminalEvent.status}`}>
-          <p className="note-label">result</p>
+          <p className="note-label">결과</p>
           <h2>{terminalTitle(terminalEvent)}</h2>
           <p>{terminalEvent.message}</p>
           {terminalEvent.status === BRIEFING_STATUS.completed ? (
-            <Link to={ROUTES.briefingDetail(briefingId)}>브리핑 상세 보기</Link>
+            <Link to={ROUTES.briefingDetail(briefingId)}>브리핑 열어보기</Link>
           ) : null}
         </section>
       ) : null}
@@ -218,19 +214,19 @@ function formatProgressCount(processed: number | null, total: number | null) {
 
 function streamStateLabel(state: string) {
   if (state === 'connecting') {
-    return '연결 중'
+    return '준비 중'
   }
 
   if (state === 'open') {
-    return '수신 중'
+    return '진행 중'
   }
 
   if (state === 'failed') {
-    return '연결 실패'
+    return '문제 발생'
   }
 
   if (state === 'closed') {
-    return '연결 종료'
+    return '완료'
   }
 
   return '대기'
@@ -254,12 +250,12 @@ function sourceLabel(source: Source) {
 
 function terminalTitle(event: BriefingTerminalEvent) {
   if (event.status === BRIEFING_STATUS.completed) {
-    return '브리핑 생성이 완료되었습니다'
+    return '브리핑이 준비되었습니다'
   }
 
   if (event.status === BRIEFING_STATUS.partial) {
-    return '일부 출처를 제외하고 생성되었습니다'
+    return '일부 소식만 먼저 준비되었습니다'
   }
 
-  return '브리핑 생성에 실패했습니다'
+  return '브리핑을 만들지 못했습니다'
 }

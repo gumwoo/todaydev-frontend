@@ -46,11 +46,10 @@ export function LoginPage() {
 
   return (
     <section className="auth-card" aria-labelledby="login-title">
-      <p className="eyebrow">sign in</p>
-      <h1 id="login-title">브리핑을 열기 전에 로그인합니다</h1>
+      <p className="eyebrow">로그인</p>
+      <h1 id="login-title">내 브리핑을 확인해요</h1>
       <p className="auth-copy">
-        토큰 처리는 화면 밖에서만 이루어지고, refresh token은 백엔드의
-        HttpOnly cookie 흐름을 따릅니다.
+        관심사에 맞춘 개발 소식을 불러오려면 먼저 로그인해 주세요.
       </p>
 
       <form className="auth-form" onSubmit={handleSubmit}>

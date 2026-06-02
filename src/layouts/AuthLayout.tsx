@@ -11,12 +11,12 @@ export function AuthLayout() {
           </span>
           <span>오늘의 개발</span>
         </Link>
-        <div>
-          <p className="eyebrow">developer briefing reader</p>
-          <h1 id="auth-title">매일 읽을 개발 흐름을 한 곳에 모읍니다</h1>
+        <div className="auth-intro-copy">
+          <p className="eyebrow">매일 아침, 필요한 개발 소식만</p>
+          <h1 id="auth-title">오늘 읽을 개발 소식을 한눈에 모아드려요</h1>
           <p>
-            GitHub, Hacker News, DEV.to, AI 요약을 조합해 아침에 바로 읽을
-            수 있는 개인 브리핑으로 정리합니다.
+            관심 있는 기술과 저장소를 기준으로 중요한 글을 골라 보기 쉽게
+            정리합니다.
           </p>
         </div>
       </section>

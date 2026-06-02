@@ -486,7 +486,9 @@ Response:
 - source별 추가 정보는 `metadata`에 둔다.
 - 프론트는 `source`에 따라 metadata를 다르게 표현할 수 있다.
 - `metadata`에는 민감정보를 넣지 않는다.
-- 현재 MVP DB 스키마에는 source별 원본 metadata와 published timestamp 컬럼이 없으므로 `metadata`는 빈 객체일 수 있고, `publishedAt`은 브리핑 생성 시간으로 대체될 수 있다.
+- `publishedAt`은 외부 source의 원본 발행 시간을 저장한 값이다.
+- `metadata`는 `briefing_item.metadata` JSONB에 저장된 source별 공개 부가 정보다.
+- 원본 발행 시간이 없는 예외 케이스는 서버가 브리핑 생성 시간으로 fallback할 수 있다.
 
 ## 10. SSE API
 
@@ -712,3 +714,20 @@ type ApiResponse<T> = ApiSuccess<T> | ApiError;
 - endpoint, field name, enum, error code 변경 시 백엔드/프론트 문서를 모두 수정한다.
 - 구현 중 임시 응답을 만들 경우 `TODO contract` 주석을 남기고 작업 완료 전에 제거한다.
 - 계약과 구현이 다르면 계약을 먼저 수정하고 구현을 맞춘다.
+
+---
+## 운영 인증/CORS 설정 기준
+
+### Refresh Cookie
+
+- refresh cookie 속성은 `app.auth.refresh-cookie` 설정으로 중앙 관리한다.
+- 로컬 기본값은 `secure=false`, `httpOnly=true`, `sameSite=Lax`, `path=/api/auth`다.
+- 운영 HTTPS 환경에서는 `app.auth.refresh-cookie.secure=true`로 설정한다.
+- `sameSite=None`을 사용하는 경우 `secure=true`가 아니면 서버 기동 단계에서 차단한다.
+
+### CORS
+
+- CORS origin은 `app.cors.allowed-origins`에서 중앙 관리한다.
+- `allow-credentials=true`를 사용하는 경우 `allowed-origins=*`는 허용하지 않는다.
+- 운영에서는 실제 프론트 URL만 origin으로 등록한다.
+- Authorization header, refresh token, stream token, API key는 URL/query/log/response DTO에 넣지 않는다.

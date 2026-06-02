@@ -1,13 +1,13 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { ROUTES } from '../constants/routes'
 import { useAuth } from '../auth/useAuth'
+import { ROUTES } from '../constants/routes'
 
 const navItems = [
   { label: '홈', to: ROUTES.home },
-  { label: '브리핑 생성', to: ROUTES.briefingNew },
-  { label: '관심사 설정', to: ROUTES.preferences },
+  { label: '새 브리핑', to: ROUTES.briefingNew },
+  { label: '관심사', to: ROUTES.preferences },
   { label: '저장한 글', to: ROUTES.savedArticles },
-  { label: '브리핑 히스토리', to: ROUTES.briefingHistory },
+  { label: '지난 브리핑', to: ROUTES.briefingHistory },
 ] as const
 
 export function AppLayout() {
@@ -39,15 +39,15 @@ export function AppLayout() {
         </nav>
 
         <section className="briefing-time" aria-labelledby="briefing-time-title">
-          <p id="briefing-time-title">내 브리핑 시간</p>
+          <p id="briefing-time-title">매일 받을 시간</p>
           <strong>08:00</strong>
-          <span>매일 아침 자동 생성 기준</span>
+          <span>아침에 소식을 모아드려요</span>
         </section>
 
         <section className="profile-block" aria-label="현재 로그인 정보">
           <div>
-            <strong>{user?.email ?? '세션 복구됨'}</strong>
-            <span>Todaydev reader</span>
+            <strong>{user?.email ?? '로그인 확인 중'}</strong>
+            <span>내 계정</span>
           </div>
           <button type="button" onClick={() => void logout()}>
             로그아웃

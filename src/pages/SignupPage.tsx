@@ -36,11 +36,10 @@ export function SignupPage() {
 
   return (
     <section className="auth-card" aria-labelledby="signup-title">
-      <p className="eyebrow">create account</p>
-      <h1 id="signup-title">첫 브리핑을 받을 계정을 만듭니다</h1>
+      <p className="eyebrow">회원가입</p>
+      <h1 id="signup-title">나만의 개발 브리핑을 시작해요</h1>
       <p className="auth-copy">
-        회원가입 후 바로 로그인하고, 이후 관심사 설정 화면으로 이어갈 수
-        있게 준비했습니다.
+        이메일과 비밀번호만 입력하면 관심사 설정으로 이어집니다.
       </p>
 
       <form className="auth-form" onSubmit={handleSubmit}>
@@ -79,7 +78,7 @@ export function SignupPage() {
         ) : null}
 
         <button type="submit" disabled={submitting}>
-          {submitting ? '계정 생성 중' : '회원가입'}
+          {submitting ? '계정 만드는 중' : '회원가입'}
         </button>
       </form>
 

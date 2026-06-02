@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getBriefings } from '../api/briefings'
 import type { BriefingStatus } from '../constants/briefing'
@@ -59,11 +59,10 @@ export function BriefingHistoryPage() {
     <section className="briefing-board single-column" aria-labelledby="page-title">
       <header className="board-header">
         <div>
-          <p className="eyebrow">briefing archive</p>
-          <h1 id="page-title">브리핑 히스토리</h1>
+          <p className="eyebrow">지난 브리핑</p>
+          <h1 id="page-title">다시 보고 싶은 브리핑</h1>
           <p className="lede">
-            지나간 브리핑을 시간순으로 다시 열어보고, 생성 상태와 수집된 글 수를
-            한 화면에서 확인합니다.
+            이전에 만든 브리핑을 시간순으로 다시 열어볼 수 있습니다.
           </p>
         </div>
         <span className="detail-status">{totalLabel}</span>
@@ -83,11 +82,11 @@ export function BriefingHistoryPage() {
 
       {!loading && items.length === 0 ? (
         <section className="reading-empty">
-          <p className="note-label">empty</p>
-          <h2>아직 생성한 브리핑이 없습니다</h2>
+          <p className="note-label">비어 있음</p>
+          <h2>아직 만든 브리핑이 없습니다</h2>
           <p>
-            첫 브리핑을 만들면 이곳에 기록이 쌓이고, 나중에 다시 읽을 수 있는
-            작은 아카이브가 됩니다.
+            첫 브리핑을 만들면 이곳에 기록이 쌓이고, 나중에 다시 읽을 수
+            있습니다.
           </p>
           <Link className="primary-action inline-action" to={ROUTES.briefingNew}>
             새 브리핑 만들기
@@ -120,14 +119,14 @@ export function BriefingHistoryPage() {
               className="history-link"
               to={ROUTES.briefingDetail(briefing.briefingId)}
             >
-              상세 보기
+              열어보기
             </Link>
           </article>
         ))}
       </div>
 
       {briefingPage !== null && briefingPage.totalPages > 1 ? (
-        <nav className="pagination" aria-label="브리핑 히스토리 페이지">
+        <nav className="pagination" aria-label="지난 브리핑 페이지">
           <button
             type="button"
             disabled={page === 0}
@@ -168,7 +167,7 @@ function statusLabel(status: BriefingStatus) {
     return '실패'
   }
 
-  return '생성 중'
+  return '만드는 중'
 }
 
 function formatDate(value: string) {
