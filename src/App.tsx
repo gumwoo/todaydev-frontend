@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+﻿import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import { AuthProvider } from './auth/AuthProvider'
 import { ROUTES } from './constants/routes'
@@ -6,11 +6,12 @@ import { AppLayout } from './layouts/AppLayout'
 import { AuthLayout } from './layouts/AuthLayout'
 import { BriefingCreatePage } from './pages/BriefingCreatePage'
 import { BriefingDetailPage } from './pages/BriefingDetailPage'
+import { BriefingHistoryPage } from './pages/BriefingHistoryPage'
 import { BriefingLoadingPage } from './pages/BriefingLoadingPage'
 import { HomePage } from './pages/HomePage'
 import { LoginPage } from './pages/LoginPage'
-import { PlaceholderPage } from './pages/PlaceholderPage'
 import { PreferencesPage } from './pages/PreferencesPage'
+import { SavedArticlesPage } from './pages/SavedArticlesPage'
 import { SignupPage } from './pages/SignupPage'
 import { ProtectedRoute } from './routes/ProtectedRoute'
 import { PublicOnlyRoute } from './routes/PublicOnlyRoute'
@@ -48,23 +49,11 @@ function App() {
               />
               <Route
                 path={ROUTES.savedArticles}
-                element={
-                  <PlaceholderPage
-                    eyebrow="reading list"
-                    title="저장한 글"
-                    description="저장한 브리핑 항목과 메모를 읽기 흐름 안에서 관리합니다."
-                  />
-                }
+                element={<SavedArticlesPage />}
               />
               <Route
                 path={ROUTES.briefingHistory}
-                element={
-                  <PlaceholderPage
-                    eyebrow="archive"
-                    title="브리핑 히스토리"
-                    description="날짜별 브리핑을 archive처럼 탐색하는 화면을 준비합니다."
-                  />
-                }
+                element={<BriefingHistoryPage />}
               />
             </Route>
           </Route>

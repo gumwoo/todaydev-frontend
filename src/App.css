@@ -1050,6 +1050,126 @@ h1 {
   opacity: 0.62;
 }
 
+.reading-empty {
+  margin-top: 34px;
+  padding: 30px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+  color: var(--muted);
+  background: rgba(255, 253, 248, 0.72);
+  line-height: 1.7;
+}
+
+.reading-empty h2 {
+  color: var(--ink);
+  letter-spacing: -0.05em;
+}
+
+.reading-list {
+  display: grid;
+  margin-top: 26px;
+}
+
+.reading-row {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) 118px;
+  gap: 24px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.memo-text {
+  margin: 12px 0 0;
+  color: var(--muted);
+  line-height: 1.72;
+}
+
+.memo-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.memo-form label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.memo-form textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  background: var(--surface-solid);
+  font: inherit;
+  line-height: 1.6;
+  padding: 12px 14px;
+}
+
+.memo-form textarea:focus {
+  border-color: var(--ink);
+  outline: none;
+}
+
+.memo-form div,
+.reading-actions,
+.pagination {
+  display: flex;
+  gap: 8px;
+}
+
+.memo-form button,
+.reading-actions button,
+.pagination button {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  background: rgba(255, 253, 248, 0.7);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.memo-form button:hover:not(:disabled),
+.reading-actions button:hover:not(:disabled),
+.pagination button:hover:not(:disabled) {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.memo-form button:disabled,
+.reading-actions button:disabled,
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.reading-actions {
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.pagination {
+  align-items: center;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.pagination span {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 800;
+}
+
 @media (max-width: 1180px) {
   .app-shell {
     grid-template-columns: 240px minmax(0, 1fr);
@@ -1166,5 +1286,85 @@ h1 {
 
   .save-button {
     width: fit-content;
+  }
+
+  .reading-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .reading-actions {
+    flex-direction: row;
+  }
+}
+
+.history-stack {
+  display: grid;
+  margin-top: 28px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.history-row {
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr) 104px;
+  gap: 28px;
+  padding: 30px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.history-index {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.history-index strong {
+  color: var(--ink);
+  font-size: 32px;
+  letter-spacing: -0.08em;
+}
+
+.history-main h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  letter-spacing: -0.05em;
+}
+
+.history-main p {
+  max-width: 820px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.72;
+}
+
+.history-link {
+  align-self: start;
+  justify-self: end;
+  padding: 9px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  background: rgba(255, 253, 248, 0.7);
+  font-size: 13px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.history-link:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+@media (max-width: 780px) {
+  .history-row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .history-link {
+    justify-self: start;
   }
 }
