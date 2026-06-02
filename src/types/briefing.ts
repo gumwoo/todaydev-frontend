@@ -56,9 +56,9 @@ export type StreamTokenResponse = {
 export type BriefingProgressEvent = {
   briefingId: number
   step: ProgressStep
-  source?: Source
-  processed: number
-  total: number
+  source: Source | null
+  processed: number | null
+  total: number | null
   message: string
 }
 

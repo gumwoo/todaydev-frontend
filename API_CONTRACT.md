@@ -559,6 +559,7 @@ Event: `BRIEFING_FAILED`
 SSE 규칙:
 
 - 이벤트 이름은 상수로 관리한다.
+- `BRIEFING_REQUESTED`, `FILTERING`, `SCORING`, `AI_SUMMARIZING`, `SAVING`, `DONE`처럼 특정 출처 또는 개수 정보가 없는 단계는 `source`, `processed`, `total`이 `null`일 수 있다.
 - `BRIEFING_DONE`, `BRIEFING_PARTIAL_DONE`, `BRIEFING_FAILED` 수신 후 프론트는 연결을 닫는다.
 - SSE message에는 token, 내부 exception, stack trace를 포함하지 않는다.
 

@@ -4,6 +4,9 @@ import { AuthProvider } from './auth/AuthProvider'
 import { ROUTES } from './constants/routes'
 import { AppLayout } from './layouts/AppLayout'
 import { AuthLayout } from './layouts/AuthLayout'
+import { BriefingCreatePage } from './pages/BriefingCreatePage'
+import { BriefingDetailPlaceholderPage } from './pages/BriefingDetailPlaceholderPage'
+import { BriefingLoadingPage } from './pages/BriefingLoadingPage'
 import { HomePage } from './pages/HomePage'
 import { LoginPage } from './pages/LoginPage'
 import { PlaceholderPage } from './pages/PlaceholderPage'
@@ -29,13 +32,15 @@ function App() {
               <Route path={ROUTES.home} element={<HomePage />} />
               <Route
                 path={ROUTES.briefingNew}
-                element={
-                  <PlaceholderPage
-                    eyebrow="briefing generation"
-                    title="브리핑 생성 화면"
-                    description="다음 단계에서 생성 요청과 SSE 진행률 timeline을 연결합니다."
-                  />
-                }
+                element={<BriefingCreatePage />}
+              />
+              <Route
+                path="/briefings/:briefingId/loading"
+                element={<BriefingLoadingPage />}
+              />
+              <Route
+                path="/briefings/:briefingId"
+                element={<BriefingDetailPlaceholderPage />}
               />
               <Route
                 path={ROUTES.preferences}
