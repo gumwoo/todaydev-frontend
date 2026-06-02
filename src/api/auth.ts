@@ -42,10 +42,11 @@ export async function refreshSession() {
 }
 
 export async function logout() {
-  const response = await apiRequest<LogoutResponse>(API_ENDPOINTS.auth.logout, {
-    method: 'POST',
-  })
-
-  clearAccessToken()
-  return response
+  try {
+    return await apiRequest<LogoutResponse>(API_ENDPOINTS.auth.logout, {
+      method: 'POST',
+    })
+  } finally {
+    clearAccessToken()
+  }
 }
