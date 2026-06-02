@@ -187,7 +187,7 @@ export function BriefingDetailPage() {
         <p id="summary-title" className="note-label">
           한눈에 보기
         </p>
-        <p>{briefing.summary}</p>
+        <p>{cleanSummaryText(briefing.summary)}</p>
       </section>
 
       <nav className="source-tabs" aria-label="브리핑 출처 필터">
@@ -245,7 +245,7 @@ function ArticleRow({ item, saved, saving, onSave }: ArticleRowProps) {
             {item.title}
           </a>
         </h2>
-        <p>{item.summary}</p>
+        <p>{cleanSummaryText(item.summary)}</p>
         <MetadataChips source={item.source} metadata={item.metadata} />
       </div>
 
@@ -369,6 +369,14 @@ function formatTags(value: BriefingMetadata[string]) {
   }
 
   return tags.join(', ')
+}
+
+function cleanSummaryText(value: string) {
+  return value
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/__(.*?)__/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 function countBySource(sections: BriefingSection[], source: SourceFilter) {
