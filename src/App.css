@@ -883,6 +883,173 @@ h1 {
   width: fit-content;
 }
 
+.detail-status {
+  align-self: start;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--success-text);
+  background: var(--success-bg);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.detail-status.PARTIAL,
+.detail-status.SUMMARY_FAILED {
+  color: var(--waiting-text);
+  background: var(--waiting-bg);
+}
+
+.detail-status.FAILED {
+  color: #8c3f25;
+  background: #fff1eb;
+}
+
+.detail-summary {
+  margin-bottom: 28px;
+}
+
+.source-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 0 14px;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.source-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--muted);
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.source-tabs button.active,
+.source-tabs button:hover {
+  border-color: var(--line);
+  color: var(--ink);
+  background: rgba(255, 253, 248, 0.72);
+}
+
+.source-tabs span {
+  color: var(--quiet);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.article-stream {
+  display: grid;
+  margin-top: 10px;
+}
+
+.article-row {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) auto;
+  gap: 24px;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.article-source-block {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.article-source-block span {
+  width: fit-content;
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(244, 236, 221, 0.72);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.article-row.github .article-source-block span {
+  color: var(--github);
+}
+
+.article-row.hacker_news .article-source-block span {
+  color: var(--hacker-news);
+}
+
+.article-row.devto .article-source-block span {
+  color: var(--devto);
+}
+
+.article-source-block strong {
+  font-family: var(--font-mono);
+  font-size: 30px;
+  letter-spacing: -0.07em;
+}
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  color: var(--quiet);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.article-main h2 {
+  margin: 8px 0 8px;
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.26;
+  letter-spacing: -0.05em;
+}
+
+.article-main h2 a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.article-main p {
+  max-width: 860px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.72;
+}
+
+.save-button {
+  align-self: start;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  background: rgba(255, 253, 248, 0.7);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.save-button:hover:not(:disabled) {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.save-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
 @media (max-width: 1180px) {
   .app-shell {
     grid-template-columns: 240px minmax(0, 1fr);
@@ -984,5 +1151,20 @@ h1 {
   .timeline-heading {
     align-items: start;
     flex-direction: column;
+  }
+
+  .article-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .article-source-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .save-button {
+    width: fit-content;
   }
 }

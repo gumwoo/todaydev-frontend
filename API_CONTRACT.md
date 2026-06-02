@@ -486,6 +486,7 @@ Response:
 - source별 추가 정보는 `metadata`에 둔다.
 - 프론트는 `source`에 따라 metadata를 다르게 표현할 수 있다.
 - `metadata`에는 민감정보를 넣지 않는다.
+- 현재 MVP DB 스키마에는 source별 원본 metadata와 published timestamp 컬럼이 없으므로 `metadata`는 빈 객체일 수 있고, `publishedAt`은 브리핑 생성 시간으로 대체될 수 있다.
 
 ## 10. SSE API
 

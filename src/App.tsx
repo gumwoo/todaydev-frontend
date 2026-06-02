@@ -5,7 +5,7 @@ import { ROUTES } from './constants/routes'
 import { AppLayout } from './layouts/AppLayout'
 import { AuthLayout } from './layouts/AuthLayout'
 import { BriefingCreatePage } from './pages/BriefingCreatePage'
-import { BriefingDetailPlaceholderPage } from './pages/BriefingDetailPlaceholderPage'
+import { BriefingDetailPage } from './pages/BriefingDetailPage'
 import { BriefingLoadingPage } from './pages/BriefingLoadingPage'
 import { HomePage } from './pages/HomePage'
 import { LoginPage } from './pages/LoginPage'
@@ -40,7 +40,7 @@ function App() {
               />
               <Route
                 path="/briefings/:briefingId"
-                element={<BriefingDetailPlaceholderPage />}
+                element={<BriefingDetailPage />}
               />
               <Route
                 path={ROUTES.preferences}
