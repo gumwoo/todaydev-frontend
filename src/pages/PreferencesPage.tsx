@@ -23,6 +23,7 @@ import { parseRepositoryInput } from '../utils/repository'
 import { INPUT_LIMITS, isValidKeyword } from '../utils/validation'
 
 const DEFAULT_KEYWORD_WEIGHT = 5
+const KEYWORD_WEIGHT_OPTIONS = Array.from({ length: 10 }, (_, index) => index + 1)
 
 export function PreferencesPage() {
   const [preferences, setPreferences] = useState<PreferencesResponse>({
@@ -31,6 +32,7 @@ export function PreferencesPage() {
   })
   const [loading, setLoading] = useState(true)
   const [keywordInput, setKeywordInput] = useState('')
+  const [keywordWeight, setKeywordWeight] = useState(DEFAULT_KEYWORD_WEIGHT)
   const [repositoryInput, setRepositoryInput] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [keywordSubmitting, setKeywordSubmitting] = useState(false)
@@ -93,13 +95,14 @@ export function PreferencesPage() {
     try {
       const created = await createKeyword({
         keyword,
-        weight: DEFAULT_KEYWORD_WEIGHT,
+        weight: keywordWeight,
       })
       setPreferences((current) => ({
         ...current,
         keywords: [...current.keywords, created],
       }))
       setKeywordInput('')
+      setKeywordWeight(DEFAULT_KEYWORD_WEIGHT)
     } catch (error) {
       setErrorMessage(getSafeErrorMessage(error))
     } finally {
@@ -206,7 +209,10 @@ export function PreferencesPage() {
             <span>{keywordCountLabel}</span>
           </div>
 
-          <form className="preference-form" onSubmit={handleKeywordSubmit}>
+          <form
+            className="preference-form keyword-preference-form"
+            onSubmit={handleKeywordSubmit}
+          >
             <label>
               키워드
               <input
@@ -217,6 +223,20 @@ export function PreferencesPage() {
                 maxLength={INPUT_LIMITS.keywordMaxLength}
                 placeholder="예: Spring, WebFlux, TypeScript"
               />
+            </label>
+            <label className="keyword-weight-field">
+              중요도
+              <select
+                name="weight"
+                value={keywordWeight}
+                onChange={(event) => setKeywordWeight(Number(event.target.value))}
+              >
+                {KEYWORD_WEIGHT_OPTIONS.map((weight) => (
+                  <option key={weight} value={weight}>
+                    {weight}
+                  </option>
+                ))}
+              </select>
             </label>
             <button type="submit" disabled={keywordSubmitting || loading}>
               {keywordSubmitting ? '추가 중' : '키워드 추가'}
