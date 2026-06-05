@@ -6,6 +6,7 @@ import { ROUTES } from '../constants/routes'
 import type { PageResponse } from '../types/api'
 import type { BriefingListItem } from '../types/briefing'
 import { getSafeErrorMessage } from '../utils/errors'
+import { cleanDisplayText, displayBriefingTitle } from '../utils/text'
 
 const PAGE_SIZE = 20
 
@@ -109,10 +110,10 @@ export function BriefingHistoryPage() {
               </div>
               <h2>
                 <Link to={ROUTES.briefingDetail(briefing.briefingId)}>
-                  {briefing.title}
+                  {displayBriefingTitle(briefing.title)}
                 </Link>
               </h2>
-              <p>{briefing.summary}</p>
+              <p>{cleanDisplayText(briefing.summary)}</p>
             </div>
 
             <Link

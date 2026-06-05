@@ -15,6 +15,7 @@ import type {
   BriefingSection,
 } from '../types/briefing'
 import { getSafeErrorMessage } from '../utils/errors'
+import { cleanDisplayText, displayBriefingTitle } from '../utils/text'
 
 type SourceFilter = 'ALL' | Source
 
@@ -166,7 +167,7 @@ export function BriefingDetailPage() {
       <header className="board-header">
         <div>
           <p className="eyebrow">{formatDate(briefing.generatedAt)}</p>
-          <h1 id="page-title">{briefing.title}</h1>
+          <h1 id="page-title">{displayBriefingTitle(briefing.title)}</h1>
           <p className="lede">
             총 {totalItemCount}개의 글을 읽기 쉽게 정리했습니다. 출처별로
             골라보거나 마음에 드는 글을 저장할 수 있습니다.
@@ -187,7 +188,7 @@ export function BriefingDetailPage() {
         <p id="summary-title" className="note-label">
           한눈에 보기
         </p>
-        <p>{cleanSummaryText(briefing.summary)}</p>
+        <p>{cleanDisplayText(briefing.summary)}</p>
       </section>
 
       <nav className="source-tabs" aria-label="브리핑 출처 필터">
@@ -245,7 +246,7 @@ function ArticleRow({ item, saved, saving, onSave }: ArticleRowProps) {
             {item.title}
           </a>
         </h2>
-        <p>{cleanSummaryText(item.summary)}</p>
+        <p>{cleanDisplayText(item.summary)}</p>
         <MetadataChips source={item.source} metadata={item.metadata} />
       </div>
 
@@ -369,14 +370,6 @@ function formatTags(value: BriefingMetadata[string]) {
   }
 
   return tags.join(', ')
-}
-
-function cleanSummaryText(value: string) {
-  return value
-    .replace(/\*\*(.*?)\*\*/g, '$1')
-    .replace(/__(.*?)__/g, '$1')
-    .replace(/\s+/g, ' ')
-    .trim()
 }
 
 function countBySource(sections: BriefingSection[], source: SourceFilter) {
