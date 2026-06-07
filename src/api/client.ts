@@ -4,7 +4,7 @@ import type { ApiErrorBody, ApiResponse } from '../types/api'
 import type { RefreshResponse } from '../types/auth'
 import { clearAccessToken, getAccessToken, setAccessToken } from './tokenStore'
 
-type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE'
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 
 type ApiRequestOptions = {
   method?: HttpMethod

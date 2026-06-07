@@ -32,6 +32,9 @@ export const API_ENDPOINTS = {
     save: (itemId: number) => `/api/saved-articles/${itemId}`,
     item: (savedId: number) => `/api/saved-articles/${savedId}`,
   },
+  schedule: {
+    briefing: '/api/schedule/me/briefing',
+  },
 } as const
 
 function normalizeBaseUrl(value: string) {
