@@ -22,6 +22,11 @@
   briefingSummaryFailed: 'BRIEFING_SUMMARY_FAILED',
   savedArticleDuplicated: 'SAVED_ARTICLE_DUPLICATED',
   savedArticleNotFound: 'SAVED_ARTICLE_NOT_FOUND',
+  notificationPreferenceNotFound: 'NOTIFICATION_PREFERENCE_NOT_FOUND',
+  notificationChannelUnsupported: 'NOTIFICATION_CHANNEL_UNSUPPORTED',
+  notificationDestinationInvalid: 'NOTIFICATION_DESTINATION_INVALID',
+  notificationTestSendFailed: 'NOTIFICATION_TEST_SEND_FAILED',
+  notificationDeliveryNotFound: 'NOTIFICATION_DELIVERY_NOT_FOUND',
   externalGithubFailed: 'EXTERNAL_GITHUB_FAILED',
   externalHackerNewsFailed: 'EXTERNAL_HACKER_NEWS_FAILED',
   externalDevtoFailed: 'EXTERNAL_DEVTO_FAILED',
@@ -64,6 +69,15 @@ export const SAFE_ERROR_MESSAGE: Record<ErrorCode, string> = {
   [ERROR_CODE.briefingSummaryFailed]: 'AI 요약 생성에 실패했습니다.',
   [ERROR_CODE.savedArticleDuplicated]: '이미 저장한 글입니다.',
   [ERROR_CODE.savedArticleNotFound]: '저장한 글을 찾을 수 없습니다.',
+  [ERROR_CODE.notificationPreferenceNotFound]: '알림 설정을 찾을 수 없습니다.',
+  [ERROR_CODE.notificationChannelUnsupported]:
+    '지원하지 않는 알림 채널입니다.',
+  [ERROR_CODE.notificationDestinationInvalid]:
+    '알림 수신 위치를 다시 확인해 주세요.',
+  [ERROR_CODE.notificationTestSendFailed]:
+    '테스트 알림을 보내지 못했습니다.',
+  [ERROR_CODE.notificationDeliveryNotFound]:
+    '알림 발송 이력을 찾을 수 없습니다.',
   [ERROR_CODE.externalGithubFailed]: 'GitHub 수집에 실패했습니다.',
   [ERROR_CODE.externalHackerNewsFailed]: 'Hacker News 수집에 실패했습니다.',
   [ERROR_CODE.externalDevtoFailed]: 'DEV.to 수집에 실패했습니다.',

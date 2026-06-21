@@ -157,6 +157,14 @@ Validation 에러:
 - `SAVED_ARTICLE_DUPLICATED`
 - `SAVED_ARTICLE_NOT_FOUND`
 
+알림:
+
+- `NOTIFICATION_PREFERENCE_NOT_FOUND`
+- `NOTIFICATION_CHANNEL_UNSUPPORTED`
+- `NOTIFICATION_DESTINATION_INVALID`
+- `NOTIFICATION_TEST_SEND_FAILED`
+- `NOTIFICATION_DELIVERY_NOT_FOUND`
+
 외부 API:
 
 - `EXTERNAL_GITHUB_FAILED`
@@ -215,6 +223,27 @@ SAVING
 DONE
 PARTIAL_DONE
 FAILED
+```
+
+Notification channel:
+
+```text
+EMAIL
+SLACK
+DISCORD
+```
+
+Notification delivery status:
+
+```text
+PENDING
+PUBLISHED
+SENDING
+SENT
+RETRYING
+FAILED
+DLQ
+SKIPPED
 ```
 
 ## 7. Auth API
@@ -641,7 +670,218 @@ Validation:
 - 사용자의 로컬 시간이 `briefingTime`과 같은 분이면 브리핑 생성 job을 enqueue한다.
 - 같은 사용자에게 같은 로컬 날짜의 브리핑이 이미 있으면 중복 생성하지 않는다.
 - 실제 수집과 AI 요약은 기존 브리핑 생성 job worker가 처리한다.
-## 12. Saved Articles API
+
+## 12. Notifications API
+
+### 알림 정책
+
+- 알림 설정은 인증된 사용자 본인의 설정만 조회, 수정, 삭제할 수 있다.
+- `channel`은 `EMAIL`, `SLACK`, `DISCORD` 중 하나다.
+- `destination`은 응답에 포함하지 않는다. 이메일 주소나 webhook URL은 민감한 수신 위치로 취급한다.
+- 설정이 존재하면 `configured=true`, 없으면 해당 채널 설정은 `configured=false`로 표현한다.
+- 알림 발송은 브리핑 생성 완료 후 활성화된 채널을 기준으로 enqueue한다.
+- 테스트 발송은 저장된 수신 위치가 있는 채널에만 허용한다.
+
+### GET `/api/notifications/me/preferences`
+
+인증된 사용자의 채널별 알림 설정 상태를 조회한다.
+
+Response `200 OK`:
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "channel": "EMAIL",
+      "enabled": true,
+      "configured": true,
+      "updatedAt": "2026-06-07T13:30:00+09:00"
+    },
+    {
+      "channel": "SLACK",
+      "enabled": false,
+      "configured": false,
+      "updatedAt": "2026-06-07T13:30:00+09:00"
+    },
+    {
+      "channel": "DISCORD",
+      "enabled": true,
+      "configured": false,
+      "updatedAt": "2026-06-07T13:30:00+09:00"
+    }
+  ],
+  "timestamp": "2026-06-07T13:30:00+09:00"
+}
+```
+
+규칙:
+
+- 서버는 지원하는 모든 채널의 상태를 반환한다.
+- 설정이 없는 채널은 `configured=false`로 반환한다.
+- `destination` 원문, webhook token, 이메일 인증 token은 응답하지 않는다.
+
+### PUT `/api/notifications/me/preferences/{channel}`
+
+인증된 사용자의 특정 채널 알림 설정을 생성하거나 수정한다.
+
+Path variable:
+
+```text
+channel=EMAIL | SLACK | DISCORD
+```
+
+Request:
+
+```json
+{
+  "destination": "name@example.com",
+  "enabled": true
+}
+```
+
+Response `200 OK`:
+
+```json
+{
+  "success": true,
+  "data": {
+    "channel": "EMAIL",
+    "enabled": true,
+    "configured": true,
+    "updatedAt": "2026-06-07T13:35:00+09:00"
+  },
+  "timestamp": "2026-06-07T13:35:00+09:00"
+}
+```
+
+Validation:
+
+- `EMAIL`의 `destination`은 유효한 이메일 주소여야 한다.
+- `SLACK`의 `destination`은 Slack Incoming Webhook URL이어야 한다.
+- `DISCORD`의 `destination`은 Discord Webhook URL이어야 한다.
+- `destination`은 앞뒤 공백을 제거한 뒤 저장한다.
+- `enabled`는 알림 활성 여부이며 필수다.
+
+오류:
+
+- 지원하지 않는 채널이면 `400`과 `NOTIFICATION_CHANNEL_UNSUPPORTED`를 반환한다.
+- 수신 위치 형식이 올바르지 않으면 `400`과 `NOTIFICATION_DESTINATION_INVALID`를 반환한다.
+
+### DELETE `/api/notifications/me/preferences/{channel}`
+
+인증된 사용자의 특정 채널 알림 설정을 삭제한다.
+
+Response `200 OK`:
+
+```json
+{
+  "success": true,
+  "data": {
+    "deleted": true
+  },
+  "timestamp": "2026-06-07T13:40:00+09:00"
+}
+```
+
+규칙:
+
+- 삭제 후 해당 채널은 `configured=false` 상태가 된다.
+- 이미 설정이 없거나 본인의 설정이 아니면 `404`와 `NOTIFICATION_PREFERENCE_NOT_FOUND`를 반환한다.
+
+### GET `/api/notifications/me/deliveries`
+
+인증된 사용자의 알림 발송 이력을 페이징으로 조회한다.
+
+Query:
+
+```text
+page=0&size=20
+```
+
+Response `200 OK`:
+
+```json
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "deliveryId": 1,
+        "briefingId": 100,
+        "channel": "EMAIL",
+        "status": "SENT",
+        "attemptCount": 1,
+        "queuedAt": "2026-06-07T08:00:00+09:00",
+        "sentAt": "2026-06-07T08:00:03+09:00",
+        "updatedAt": "2026-06-07T08:00:03+09:00"
+      }
+    ],
+    "page": 0,
+    "size": 20,
+    "totalElements": 1,
+    "totalPages": 1,
+    "hasNext": false
+  },
+  "timestamp": "2026-06-07T13:45:00+09:00"
+}
+```
+
+규칙:
+
+- 최신 발송 이력이 먼저 오도록 정렬한다.
+- `queuedAt`은 아직 큐에 등록되지 않았거나 기록이 없으면 `null`일 수 있다.
+- `sentAt`은 성공 발송 전까지 `null`이다.
+- 발송 실패의 내부 exception, webhook URL, 이메일 주소는 응답하지 않는다.
+
+Delivery status 의미:
+
+- `PENDING`: 발송 요청이 생성되었지만 아직 큐에 등록되지 않았다.
+- `PUBLISHED`: 발송 요청이 큐에 등록되었다.
+- `SENDING`: worker가 발송을 시도하고 있다.
+- `SENT`: 발송이 성공했다.
+- `RETRYING`: 재시도 대기 중이다.
+- `FAILED`: 최종 발송에 실패했다.
+- `DLQ`: 실패 큐로 이동했다.
+- `SKIPPED`: 비활성 설정, 미설정 채널, 중복 정책 등으로 발송하지 않았다.
+
+### POST `/api/notifications/me/test`
+
+저장된 설정을 사용해 테스트 알림을 발송한다.
+
+Request:
+
+```json
+{
+  "channel": "EMAIL"
+}
+```
+
+Response `200 OK`:
+
+```json
+{
+  "success": true,
+  "data": {
+    "channel": "EMAIL",
+    "enabled": true,
+    "configured": true,
+    "updatedAt": "2026-06-07T13:50:00+09:00"
+  },
+  "timestamp": "2026-06-07T13:50:00+09:00"
+}
+```
+
+규칙:
+
+- 테스트 발송은 실제 외부 채널로 전송한다.
+- 테스트 발송 성공 후 현재 채널 설정 상태를 반환한다.
+- 설정이 없는 채널이면 `404`와 `NOTIFICATION_PREFERENCE_NOT_FOUND`를 반환한다.
+- 지원하지 않는 채널이면 `400`과 `NOTIFICATION_CHANNEL_UNSUPPORTED`를 반환한다.
+- 외부 채널 발송 실패는 `502`와 `NOTIFICATION_TEST_SEND_FAILED`를 반환한다.
+- 응답과 로그에는 `destination`, webhook token, raw provider response body를 포함하지 않는다.
+
+## 13. Saved Articles API
 
 ### POST `/api/saved-articles/{itemId}`
 
@@ -750,7 +990,7 @@ Response:
 - 존재하지 않거나 권한이 없는 저장 글은 `SAVED_ARTICLE_NOT_FOUND`로 처리한다.
 - `memo`는 최대 1000자이며, 비어 있으면 빈 문자열로 저장할 수 있다.
 
-## 12. 프론트 타입 생성 기준
+## 14. 프론트 타입 생성 기준
 
 프론트는 이 계약을 기준으로 타입을 만든다.
 
@@ -783,7 +1023,7 @@ type ApiResponse<T> = ApiSuccess<T> | ApiError;
 - error code는 문자열 비교를 흩뿌리지 않고 상수로 관리한다.
 - 백엔드 DTO 변경 시 프론트 타입도 함께 수정한다.
 
-## 13. 변경 관리
+## 15. 변경 관리
 
 - 이 문서 변경은 API breaking change로 간주한다.
 - endpoint, field name, enum, error code 변경 시 백엔드/프론트 문서를 모두 수정한다.
@@ -806,4 +1046,3 @@ type ApiResponse<T> = ApiSuccess<T> | ApiError;
 - `allow-credentials=true`를 사용하는 경우 `allowed-origins=*`는 허용하지 않는다.
 - 운영에서는 실제 프론트 URL만 origin으로 등록한다.
 - Authorization header, refresh token, stream token, API key는 URL/query/log/response DTO에 넣지 않는다.
-
