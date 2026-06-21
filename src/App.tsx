@@ -10,6 +10,7 @@ import { BriefingHistoryPage } from './pages/BriefingHistoryPage'
 import { BriefingLoadingPage } from './pages/BriefingLoadingPage'
 import { HomePage } from './pages/HomePage'
 import { LoginPage } from './pages/LoginPage'
+import { NotificationsPage } from './pages/NotificationsPage'
 import { PreferencesPage } from './pages/PreferencesPage'
 import { SavedArticlesPage } from './pages/SavedArticlesPage'
 import { SignupPage } from './pages/SignupPage'
@@ -50,6 +51,10 @@ function App() {
               <Route
                 path={ROUTES.savedArticles}
                 element={<SavedArticlesPage />}
+              />
+              <Route
+                path={ROUTES.notifications}
+                element={<NotificationsPage />}
               />
               <Route
                 path={ROUTES.briefingHistory}

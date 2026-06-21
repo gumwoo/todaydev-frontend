@@ -8,4 +8,5 @@ export const ROUTES = {
   briefingDetail: (briefingId: number) => `/briefings/${briefingId}`,
   briefingHistory: '/briefings',
   savedArticles: '/saved-articles',
+  notifications: '/notifications',
 } as const

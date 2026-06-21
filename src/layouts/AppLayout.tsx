@@ -14,6 +14,7 @@ const navItems = [
   { label: '홈', to: ROUTES.home },
   { label: '새 브리핑', to: ROUTES.briefingNew },
   { label: '관심사', to: ROUTES.preferences },
+  { label: '알림', to: ROUTES.notifications },
   { label: '저장한 글', to: ROUTES.savedArticles },
   { label: '지난 브리핑', to: ROUTES.briefingHistory },
 ] as const

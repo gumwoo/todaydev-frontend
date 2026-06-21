@@ -35,6 +35,13 @@ export const API_ENDPOINTS = {
   schedule: {
     briefing: '/api/schedule/me/briefing',
   },
+  notifications: {
+    preferences: '/api/notifications/me/preferences',
+    preference: (channel: string) =>
+      `/api/notifications/me/preferences/${channel}`,
+    deliveries: '/api/notifications/me/deliveries',
+    test: '/api/notifications/me/test',
+  },
 } as const
 
 function normalizeBaseUrl(value: string) {
